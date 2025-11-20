@@ -1,0 +1,6 @@
+I do not endorse using Cargo if the project does not plan using external packages.
+Compiler is all you need. In this case, I have an idea of adding audio output (TBD),
+once I figure out how to implement it more efficiently.
+
+Use:
+	cargo run -- examples/plain.txt
