@@ -2,6 +2,7 @@ use std::io::Write;
 use std::fs::{self, File};
 
 use crate::MorseError;
+use crate::audio;
 
 pub fn translate_to_morse(file: &String) -> Result<(), MorseError> {
     let mut buf: Vec<&str> = Vec::new();
@@ -31,13 +32,31 @@ pub fn translate_to_morse(file: &String) -> Result<(), MorseError> {
     }
     buf.truncate(buf.len() - 3); // i couldn't think of a smarter solution yet
 
-    let mut output_file = File::create("MORSE").unwrap();
+    let mut output_file = File::create("MORSE").unwrap();          // store the code in text
+    let mut sound_build_script = File::create("audio/INSTRUCTIONS").unwrap();    // prepare the instructions for audio creating
+    
     for c in &buf {
 	write!(output_file, "{}", c).unwrap();
     }
+
+    let buf_chars: Vec<char> = buf
+	.into_iter()
+	.flat_map(|s| s.chars())
+	.collect();
     
-    let write: String = buf.into_iter().collect();
-    println!("MORSE OUTPUT: {}", write);
+    for c in &buf_chars {
+	match c {
+	    '.' => writeln!(sound_build_script, "{}", audio::DIT).unwrap(),
+	    '-' => writeln!(sound_build_script, "{}", audio::DAH).unwrap(),
+	    ' ' => writeln!(sound_build_script, "{}", audio::SPACE_LETTERS).unwrap(),
+	    '/' => writeln!(sound_build_script, "{}", audio::SPACE_WORDS).unwrap(),
+	    _ => {},
+	}
+    }
+
+    audio::create_audio();
+    
+    println!("MORSE OUTPUT: #{}#", buf_chars.into_iter().collect::<String>());
     Ok(())
 }
 

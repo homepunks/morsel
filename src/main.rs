@@ -1,6 +1,7 @@
 use std::env::args;
 
 mod morse;
+mod audio;
 
 enum MorseError {
     InvalidChar,
