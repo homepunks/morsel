@@ -46,17 +46,16 @@ pub fn translate_to_morse(file: &String) -> Result<(), MorseError> {
     
     for c in &buf_chars {
 	match c {
-	    '.' => writeln!(sound_build_script, "{}", audio::DIT).unwrap(),
-	    '-' => writeln!(sound_build_script, "{}", audio::DAH).unwrap(),
-	    ' ' => writeln!(sound_build_script, "{}", audio::SPACE_LETTERS).unwrap(),
-	    '/' => writeln!(sound_build_script, "{}", audio::SPACE_WORDS).unwrap(),
+	    '.' => writeln!(sound_build_script, "file '{}'", audio::DIT).unwrap(),
+	    '-' => writeln!(sound_build_script, "file '{}'", audio::DAH).unwrap(),
+	    ' ' => writeln!(sound_build_script, "file '{}'", audio::SPACE_LETTERS).unwrap(),
+	    '/' => writeln!(sound_build_script, "file '{}'", audio::SPACE_WORDS).unwrap(),
 	    _ => {},
 	}
     }
-
-    audio::create_audio();
     
     println!("MORSE OUTPUT: #{}#", buf_chars.into_iter().collect::<String>());
+    let _ = audio::create_audio();
     Ok(())
 }
 
