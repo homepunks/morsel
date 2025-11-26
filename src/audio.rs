@@ -23,8 +23,6 @@ pub fn create_audio() -> Result<(), Box<dyn std::error::Error>> {
 	println!("INFO: Morse code audio is created successfully!");
     } else {
 	eprintln!("ERROR: FFmpeg command failed with status: {}", output.status);
-	// eprintln!("Stdout: {}", String::from_utf8_lossy(&output.stdout));
-        // eprintln!("Stderr: {}", String::from_utf8_lossy(&output.stderr));
     }
 
     Ok(())
