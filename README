@@ -1,6 +1,17 @@
+Translate your text files to International Morse code. In the output, you get both
+the textual and audio translation. (Project uses FFMPEG but I don't know if I want
+either of us to compile it with cargo, so just make sure you have the binaries
+installed). We might get rid of this dependency in favour of some lighter crate, if
+I manage to find it.
+
 I do not endorse using Cargo if the project does not plan using external packages.
-Compiler is all you need. In this case, I have an idea of adding audio output (TBD),
-once I figure out how to implement it more efficiently.
+Compiler is all you need.
 
 Use:
-	cargo run -- examples/plain.txt
+	cargo run --release -- examples/plain.txt
+	# or:
+	rustc src/main.rs
+	./main examples/plain.txt
+
+	cat MORSE
+	ffplay MORSE.ogg
