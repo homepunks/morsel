@@ -9,20 +9,26 @@ pub fn create_audio() -> Result<(), Box<dyn std::error::Error>> {
     let audio_script = "audio/INSTRUCTIONS";
 
     println!("INFO: Constructing the Morse code audio...");
-    let mut cmd = Command::new("ffmpeg");   
+    let mut cmd = Command::new("ffmpeg");
     cmd.args([
-	"-f", "concat",
-	"-i", audio_script,
-	"-c", "copy",
-	"-y",
-	"MORSE.ogg",
+        "-f",
+        "concat",
+        "-i",
+        audio_script,
+        "-c",
+        "copy",
+        "-y",
+        "MORSE.ogg",
     ]);
 
     let output = cmd.output()?;
     if output.status.success() {
-	println!("INFO: Morse code audio is created successfully!");
+        println!("INFO: Morse code audio is created successfully!");
     } else {
-	eprintln!("ERROR: FFmpeg command failed with status: {}", output.status);
+        eprintln!(
+            "ERROR: FFmpeg command failed with status: {}",
+            output.status
+        );
     }
 
     Ok(())

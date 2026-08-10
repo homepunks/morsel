@@ -1,7 +1,7 @@
 use std::env::args;
 
-mod morse;
 mod audio;
+mod morse;
 
 enum MorseError {
     InvalidChar,
@@ -11,12 +11,12 @@ enum MorseError {
 fn main() {
     let args: Vec<String> = args().collect();
     if args.len() > 1 {
-	match morse::translate_to_morse(&args[1]) {
-	    Ok(()) => println!("INFO: Done! File MORSE is created!"),
-	    Err(_) => println!("ERROR: Aborting..."),
-	};
+        match morse::translate_to_morse(&args[1]) {
+            Ok(()) => println!("INFO: Done! File MORSE is created!"),
+            Err(_) => println!("ERROR: Aborting..."),
+        };
     } else {
-	println!("INFO: Not enough arguments supplied.");
-	println!("INFO: Example usage: ./target/debug/morse plain.txt");
+        println!("INFO: Not enough arguments supplied.");
+        println!("INFO: Example usage: ./target/debug/morsel plain.txt");
     }
 }
