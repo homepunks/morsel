@@ -9,21 +9,10 @@ pub fn translate_to_morse(file: &String) -> Result<(), MorseError> {
     let input_text =
         fs::read_to_string(file).map_err(|_| MorseError::InvalidFile(PathBuf::from(file)))?;
 
-    for c in input_text.chars() {
-        if !c.is_ascii_alphanumeric() && !c.is_whitespace() {
-            return Err(MorseError::InvalidChar(c));
-        }
-    }
-
     let code = input_text
         .split_whitespace()
-        .map(|word| {
-            word.chars()
-                .filter_map(match_morse)
-                .collect::<Vec<_>>()
-                .join(" ")
-        })
-        .collect::<Vec<_>>()
+        .map(translate_word)
+        .collect::<Result<Vec<_>, _>>()?
         .join(" / ");
 
     let mut output_file = File::create("MORSE").unwrap(); // store the code in text
@@ -44,6 +33,15 @@ pub fn translate_to_morse(file: &String) -> Result<(), MorseError> {
     println!("MORSE OUTPUT: #{code}#");
     let _ = audio::create_audio();
     Ok(())
+}
+
+fn translate_word(word: &str) -> Result<String, MorseError> {
+    let letters = word
+        .chars()
+        .map(|c| match_morse(c).ok_or(MorseError::InvalidChar(c)))
+        .collect::<Result<Vec<_>, _>>()?;
+
+    Ok(letters.join(" "))
 }
 
 fn match_morse(c: char) -> Option<&'static str> {
