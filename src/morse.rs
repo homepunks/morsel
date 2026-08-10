@@ -1,25 +1,17 @@
 use std::fs::{self, File};
 use std::io::Write;
+use std::path::PathBuf;
 
-use crate::MorseError;
 use crate::audio;
+use crate::error::MorseError;
 
 pub fn translate_to_morse(file: &String) -> Result<(), MorseError> {
-    let input_text = match fs::read_to_string(file) {
-        Ok(plain_text) => plain_text,
-        Err(_) => {
-            eprintln!(
-                "ERROR: Could not read file {file}. Are you sure you've supplied a valid text file?"
-            );
-            return Err(MorseError::InvalidFile);
-        }
-    };
+    let input_text =
+        fs::read_to_string(file).map_err(|_| MorseError::InvalidFile(PathBuf::from(file)))?;
 
     for c in input_text.chars() {
         if !c.is_ascii_alphanumeric() && !c.is_whitespace() {
-            eprintln!("ERROR: Could not process symbol {c}");
-            eprintln!("ERROR: Only use ASCII alphanumerics for international Morse code.");
-            return Err(MorseError::InvalidChar);
+            return Err(MorseError::InvalidChar(c));
         }
     }
 
