@@ -14,7 +14,7 @@ impl fmt::Display for MorseError {
             Self::InvalidChar(c) => {
                 write!(
                     f,
-                    "could not process symbol {c:?}: only ASCII letters and digits are supported"
+                    "could not process symbol {c:?}: not in the International Morse alphabet"
                 )
             }
             Self::InvalidFile(path) => {
