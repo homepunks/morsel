@@ -16,22 +16,10 @@ pub fn translate_to_morse(file: &String) -> Result<(), MorseError> {
         .join(" / ");
 
     let mut output_file = File::create("MORSE").unwrap(); // store the code in text
-    let mut sound_build_script = File::create("audio/INSTRUCTIONS").unwrap(); // prepare the instructions for audio creating
-
     write!(output_file, "{code}").unwrap();
 
-    for c in code.chars() {
-        match c {
-            '.' => writeln!(sound_build_script, "file '{}'", audio::DIT).unwrap(),
-            '-' => writeln!(sound_build_script, "file '{}'", audio::DAH).unwrap(),
-            ' ' => writeln!(sound_build_script, "file '{}'", audio::SPACE_LETTERS).unwrap(),
-            '/' => writeln!(sound_build_script, "file '{}'", audio::SPACE_WORDS).unwrap(),
-            _ => {}
-        }
-    }
-
     println!("MORSE OUTPUT: #{code}#");
-    let _ = audio::create_audio();
+    let _ = audio::create_audio(&code);
     Ok(())
 }
 
